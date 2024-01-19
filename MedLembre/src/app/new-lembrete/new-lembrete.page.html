@@ -1,0 +1,25 @@
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title> Cadastro novo Lembrete </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <!-- conteudo pagina inical-->
+  <ion-content class="ion-padding"> 
+    <form (ngSubmit)="submitForm()" [formGroup]="meuForm">
+      <ion-input type="text" formControlName="nome" placeholder="Nome"></ion-input>
+      <ion-input type="text" formControlName="Detalhe" placeholder="Detalhe"></ion-input>
+      <ion-input type="text" formControlName="Horario" placeholder="Horario"></ion-input>
+      <ion-datetime presentation="date-time" [preferWheel]="true" formControlName="data" [(ngModel)]="alarmTime"></ion-datetime>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*">
+
+      <ion-button type="submit">Enviar</ion-button>
+      <ion-button (click)="visualizarDados()">Visualizar Dados Salvos</ion-button>
+     
+
+    </form>
+  </ion-content>
+</div>
