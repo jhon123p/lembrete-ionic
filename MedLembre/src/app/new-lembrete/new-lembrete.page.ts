@@ -45,9 +45,9 @@ export class NewLembretePage implements OnInit {
         dadosFormulario.id = uniqueId;
 
         dataToSave.push(dadosFormulario);
-        this.dadosService.mostrarAlerta('Cadastro Realizado com sucesso','')
-        console.log(dadosFormulario)
-  
+        this.dadosService.mostrarAlerta('Cadastro Realizado com sucesso','');
+        console.log(dadosFormulario);
+        
         this.dadosService.salvarDados(dataToSave).then(() => {
           console.log('Dados do formulário salvos no Local Storage');
         });
