@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
+import { DadosService } from '../dados.service';
 
 
 @Component({
@@ -12,7 +13,10 @@ import { Storage } from '@ionic/storage-angular';
 export class UpdateItemPage implements OnInit {
 
   item: any;
-  constructor( private rotas:NavController , private rota: ActivatedRoute , private storage:Storage) { }
+  constructor( private rotas:NavController , 
+              private rota: ActivatedRoute , 
+              private storage:Storage ,
+              private service:DadosService) { }
 
   async ngOnInit() {
     this.rota.paramMap.subscribe(async params => {
@@ -29,7 +33,7 @@ export class UpdateItemPage implements OnInit {
         // Se necessário, faça alguma lógica adicional com o item
         console.log(this.item);
       } else {
-        console.log('Não foram encontrados itens no Storage.');
+        this.service.mostrarAlerta("item nao encontrado na base",'')
       }
     });
   }

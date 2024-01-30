@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DadosService } from '../dados.service';
 
 @Component({
   selector: 'app-login',
@@ -9,20 +10,18 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
   username: string = '';
   password: string = '';
-  constructor(private router:Router) {}
+  constructor(private router:Router , private service:DadosService) {}
 
   ngOnInit() {
   }
   login() {
-    // Aqui, você pode adicionar a lógica de validação do usuário e senha.
-    // Por exemplo, você pode verificar se o nome de usuário e a senha estão corretos.
     // Se a validação for bem-sucedida, redirecione o usuário para a página principal.
     if (this.username === 'usuario' && this.password === 'senha') {
       // Login bem-sucedido, redirecione para a página principal
       this.router.navigate(['/home']);
     } else {
       // Exiba uma mensagem de erro ou trate o login inválido de outra forma
-      console.log('Login inválido. Verifique suas credenciais.');
+      this.service.mostrarAlerta('falha nas credenciais por favor verifique novamente','')
     }
   }
 }

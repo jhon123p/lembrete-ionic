@@ -87,6 +87,7 @@ export class HomePage {
       this.dadosSalvos = dados || [];
       this.dadosExibicao = this.dadosSalvos.slice(0, 2); // Configure this.dadosExibicao após a recuperação de dados
     });
+    this.dadosService.setAlarm();
   }
   
   carregarMaisItens() {
