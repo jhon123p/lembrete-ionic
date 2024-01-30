@@ -43,13 +43,19 @@ export class DadosService {
     })
     
   }
-  async mostrarAlerta(titulo: string, mensagem: string ) {
+  async mostrarAlerta(titulo: string, mensagem: string) {
     const alert = await this.alertController.create({
       header: titulo,
       message: mensagem,
-      buttons: ['OK']
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          window.location.reload();
+        }
+      }]
     });
   
     await alert.present();
   }
+  
 }
