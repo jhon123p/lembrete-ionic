@@ -3,6 +3,8 @@ import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DadosService } from '../dados.service';
+import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-new-lembrete',
@@ -35,6 +37,7 @@ export class NewLembretePage implements OnInit {
     this.storage.get('dadosFormulario')
 
     if (this.meuForm.valid) {
+
       const dadosFormulario = this.meuForm.value;
       const uniqueId = Date.now().toString();
 
@@ -47,6 +50,10 @@ export class NewLembretePage implements OnInit {
         dataToSave.push(dadosFormulario);
         this.dadosService.mostrarAlerta('Cadastro Realizado com sucesso','');
         console.log(dadosFormulario);
+
+        //config alarme screduler
+        const getData =  new Date(dadosFormulario.data)
+        this.scheduleLocalNotification(getData)
         
         this.dadosService.salvarDados(dataToSave).then(() => {
           console.log('Dados do formulário salvos no Local Storage');
@@ -74,6 +81,7 @@ export class NewLembretePage implements OnInit {
   
         if (this.selectedImage) {
           dadosFormulario.imagem = this.selectedImage; // Adicione a imagem aos dados do formulário
+          
         }
       
       });
@@ -84,11 +92,25 @@ export class NewLembretePage implements OnInit {
     
   }
 
-
-  //config alrme
-
-
-//fim alarme
+  async scheduleLocalNotification(dateAlert:Date) {
+    try {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: 'title',
+            body: 'body',
+            id: 1,
+            schedule: { at: dateAlert }, // Agendando para 5 segundos a partir de agora
+            actionTypeId: '',
+            extra: null
+          }
+        ]
+      });
+      console.log('Notificação agendada com sucesso!');
+    } catch (error) {
+      console.error('Erro ao agendar notificação:', error);
+    }
+  }
 
   async ngOnInit() {
     this.dadosService.setAlarm()
@@ -104,6 +126,7 @@ export class NewLembretePage implements OnInit {
 
     reader.onload = (e) => {
       this.selectedImage = reader.result;
+      
     };
 
     reader.readAsDataURL(file);
