@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import * as dayjs from 'dayjs';
 import { AlertController } from '@ionic/angular';
+import { LocalNotifications , ScheduleOptions } from '@capacitor/local-notifications';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,6 @@ export class DadosService {
               private alertController: AlertController,) {
     
    }
-
   // Método para salvar dados
   salvarDados(dados: any[]) {
     return this.storage.set('dadosFormulario', dados);
@@ -43,6 +43,28 @@ export class DadosService {
     })
     
   }
+
+  async scheduleLocalNotification(dateAlert:any , id:number) {
+
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: 'title',
+            body: 'body',
+            id: id,
+            schedule: { at: dateAlert }
+          }
+          
+        ]
+      }).then(() => {
+        console.log('Notificação agendada com sucesso!');
+      }).catch((error) => {
+        console.error('Error ao agendar notificação', error)
+      })
+    } 
+    
+  
+
   async mostrarAlerta(titulo: string, mensagem: string) {
     const alert = await this.alertController.create({
       header: titulo,
