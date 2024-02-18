@@ -34,72 +34,67 @@ export class NewLembretePage implements OnInit {
   
   
   submitForm() {
-    this.storage.get('dadosFormulario')
-
     if (this.meuForm.valid) {
-
       const dadosFormulario = this.meuForm.value;
       const uniqueId = Date.now().toString();
-
+  
+      // Recuperar dados existentes e adicionar os novos dados ao array
       this.dadosService.recuperarDados().then((existingData) => {
         let dataToSave: any[] = existingData || [];
-  
-        // Adicione os novos dados ao array
         dadosFormulario.id = uniqueId;
-
         dataToSave.push(dadosFormulario);
-        this.dadosService.mostrarAlerta('Cadastro Realizado com sucesso','');
-        console.log(dadosFormulario);
-
-        //config alarme screduler
-        const getData =  new Date(dadosFormulario.data)
-        this.scheduleLocalNotification(getData)
         
+        // Salvar dados e mostrar alerta de sucesso
         this.dadosService.salvarDados(dataToSave).then(() => {
           console.log('Dados do formulário salvos no Local Storage');
+          this.dadosService.mostrarAlerta('Cadastro Realizado com sucesso', '');
+          
+          // Agendar notificação local
+          const getData = new Date(dadosFormulario.data);
+          const title = dadosFormulario.nome
+          const body = dadosFormulario.Detalhe
+          console.log(getData , typeof(getData))
+          const id =  Math.floor(Math.random() * 4294967296) - 2147483648;
+          this.scheduleLocalNotification(title , body , getData , id);
+          
+          // Adicionar a imagem aos dados do formulário
+          if (this.selectedImage) {
+            dadosFormulario.imagem = this.selectedImage;
+          }
         });
       });
   
+      // Verificar se campos obrigatórios estão preenchidos
       if (!dadosFormulario.nome || !dadosFormulario.Detalhe) {
         this.dadosService.mostrarAlerta('Campos Vazios', 'Por favor, preencha todos os campos obrigatórios.');
-        return; // Encerre a função se os campos estiverem vazios
+        return; // Encerrar a função se os campos estiverem vazios
       }
   
+      // Verificar se novos dados já existem no array
       this.storage.get('dadosFormulario').then((existingData) => {
         let dataToSave: any[] = [];
   
         if (existingData && Array.isArray(existingData)) {
           dataToSave = existingData;
-  
-          // Verifique se os novos dados já existem no array
           const isDuplicate = dataToSave.some((item) => {
-            //return JSON.stringify(item) === JSON.stringify(dadosFormulario);
             return item.nome === dadosFormulario.nome;
           });
-
         }
-  
-        if (this.selectedImage) {
-          dadosFormulario.imagem = this.selectedImage; // Adicione a imagem aos dados do formulário
-          
-        }
-      
       });
-  
     } else {
       this.dadosService.mostrarAlerta('Campos Inválidos', 'Por favor, preencha os campos corretamente.');
     }
-    
   }
+  
 
-  async scheduleLocalNotification(dateAlert:Date) {
+  async scheduleLocalNotification(title:string , body:string , dateAlert:Date , id:number) {
     try {
       await LocalNotifications.schedule({
         notifications: [
           {
-            title: 'title',
-            body: 'body',
-            id: 1,
+            title: title,
+            body: body,
+            id: id,
             schedule: { at: dateAlert }, // Agendando para 5 segundos a partir de agora
             actionTypeId: '',
             extra: null
