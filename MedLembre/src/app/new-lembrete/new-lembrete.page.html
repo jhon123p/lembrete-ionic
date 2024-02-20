@@ -9,16 +9,26 @@
   </ion-header>
   <!-- conteudo pagina inical-->
   <ion-content class="ion-padding"> 
+    <ion-refresher slot="fixed" (ionRefresh)="atualizarConteudo($event)">
+      <ion-refresher-content pullingIcon="arrow-down" pullingText="Puxe para atualizar" refreshingSpinner="circles" refreshingText="Atualizando...">
+      </ion-refresher-content>
+    </ion-refresher>
     <form (ngSubmit)="submitForm()" [formGroup]="meuForm">
       <ion-input type="text" formControlName="nome" placeholder="Nome"></ion-input>
       <ion-input type="text" formControlName="Detalhe" placeholder="Detalhe"></ion-input>
-      <ion-datetime presentation="date-time" [preferWheel]="true" formControlName="data" [(ngModel)]="alarmTime"></ion-datetime>
-      <input type="file" (change)="onFileSelected($event)" accept="image/*">
+      <ion-datetime presentation="date-time" [preferWheel]="true" formControlName="data" [(ngModel)]="alarmTime" display-format="DD.MM.YYYY HH:mm"></ion-datetime>
 
-      <ion-button type="submit">Enviar</ion-button>
+      <ion-button (click)="fileInput.click()" class="custom-file-input-button">
+        Foto do Medicamento
+      </ion-button>
+      <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+      
+  
+      <ion-button type="submit">Salvar </ion-button>
       <ion-button (click)="visualizarDados()">Visualizar Dados Salvos</ion-button>
-     
+      <!--<ion-button (click)="scheduleLocalNotification()">Agendar Notificação</ion-button>-->
 
     </form>
+
   </ion-content>
 </div>

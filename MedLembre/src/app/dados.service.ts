@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import * as dayjs from 'dayjs';
 import { AlertController } from '@ionic/angular';
+import { LocalNotifications , ScheduleOptions } from '@capacitor/local-notifications';
+import { RefresherEventDetail } from '@ionic/core';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,15 +13,14 @@ import { AlertController } from '@ionic/angular';
 export class DadosService {
 
   constructor(private storage: Storage,
-              private alertController: AlertController,) {
+              private alertController: AlertController,
+            ) {
     
    }
-
   // Método para salvar dados
   salvarDados(dados: any[]) {
     return this.storage.set('dadosFormulario', dados);
   }
- 
   // Método para recuperar dados
   recuperarDados() {
     return this.storage.get('dadosFormulario');
@@ -43,6 +46,24 @@ export class DadosService {
     })
     
   }
+  async scheduleLocalNotificationn(dateAlert:any , id:number) {
+
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: 'title',
+            body: 'body',
+            id: id,
+            schedule: { at: dateAlert }
+          }
+          
+        ]
+      }).then(() => {
+        console.log('Notificação agendada com sucesso!');
+      }).catch((error) => {
+        console.error('Error ao agendar notificação', error)
+      })
+    } 
   async mostrarAlerta(titulo: string, mensagem: string) {
     const alert = await this.alertController.create({
       header: titulo,
@@ -57,5 +78,38 @@ export class DadosService {
   
     await alert.present();
   }
-  
+  async atualizarConteudo(event: CustomEvent<RefresherEventDetail>) {
+    console.log('Atualizando conteúdo...');
+
+    // Coloque aqui a lógica para atualizar os dados, por exemplo:
+    await this.carregarDados();
+
+    // Complete o evento de atualização quando terminar de atualizar os dados
+    event.detail.complete();
+  }
+  async carregarDados() {
+    window.location.reload();
+    
+  }
+  async scheduleNotification(id: number, title: string, body: string, dateAlert: Date) {
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: title,
+          body: body,
+          id: id,
+          schedule: { at: dateAlert }
+        }
+        
+      ]
+    }).then(() => {
+      console.log('Notificação agendada com sucesso!');
+    }).catch((error) => {
+      console.error('Error ao agendar notificação', error)
+    })
+  }
+
+  async cancelNotification(id: number) {
+    await LocalNotifications.cancel({ notifications: [{ id: id }] });
+  }
 }
