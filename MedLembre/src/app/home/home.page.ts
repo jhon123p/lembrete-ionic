@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { DadosService } from '../dados.service';
 import { Storage } from '@ionic/storage-angular';
-import { RefresherEventDetail } from '@ionic/core';
 import { Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 
@@ -21,15 +20,9 @@ export class HomePage {
   item:any;
 
 
-  async atualizarConteudo(event: CustomEvent<RefresherEventDetail>) {
-    console.log('Atualizando conteúdo...');
-
-    // Coloque aqui a lógica para atualizar os dados, por exemplo:
-    await this.carregarDados();
-
-    // Complete o evento de atualização quando terminar de atualizar os dados
-    event.detail.complete();
-  }
+  async atualizarConteudo(event: CustomEvent) {
+    this.dadosService.atualizarConteudo(event)
+}
 
   async carregarDados() {
     window.location.reload();
