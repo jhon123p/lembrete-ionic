@@ -22,11 +22,14 @@
         <ion-item-sliding>
           <ion-item>
             <ion-label>
-              <p>{{ dado.nome }}</p>
+              <p>{{ dado.nome }}</p> 
               <p>{{ dado.Detalhe }}</p>
               <p>{{ dado.Horario }}</p>
             </ion-label>
-
+            
+            <ion-button (click)="updateObjeto(dado.id)"> <ion-icon name="flower"></ion-icon> </ion-button>
+            <div> | |</div>
+            <ion-button (click)="apagar(dado)"> <ion-icon name="trash-bin"></ion-icon> </ion-button>
             
           </ion-item>
           

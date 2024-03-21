@@ -14,21 +14,28 @@
       </ion-refresher-content>
     </ion-refresher>
     <form (ngSubmit)="submitForm()" [formGroup]="meuForm">
-      <ion-input type="text" formControlName="nome" placeholder="Nome"></ion-input>
-      <ion-input type="text" formControlName="Detalhe" placeholder="Detalhe"></ion-input>
-      <ion-datetime presentation="date-time" [preferWheel]="true" formControlName="data" [(ngModel)]="alarmTime" display-format="DD.MM.YYYY HH:mm"></ion-datetime>
-
-      <ion-button (click)="fileInput.click()" class="custom-file-input-button">
-        Foto do Medicamento
-      </ion-button>
-      <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+      <ion-input type="text" formControlName="nome" placeholder="Por exemplo Omega-3">Nome do Medicamento</ion-input>
+      <div class="yellow-line"></div> <!-- Linha amarela abaixo do primeiro input -->
+    
       
-  
-      <ion-button type="submit">Salvar </ion-button>
-      <ion-button (click)="visualizarDados()">Visualizar Dados Salvos</ion-button>
-      <!--<ion-button (click)="scheduleLocalNotification()">Agendar Notificação</ion-button>-->
-
+      <ion-input type="text" formControlName="Detalhe" placeholder="Diga como voce deve toma-lo">Observação</ion-input>
+    
+      <div class="yellow-line"></div> <!-- Linha amarela abaixo do terceiro input -->
+      <ion-input>Que Horas Você deve tomar..??
+        <ion-datetime id="datetime" presentation="time" formControlName="data" [(ngModel)]="alarmTime"></ion-datetime>
+      </ion-input>
+    
+      <ion-button (click)="fileInput.click()" class="custom-file-input-button">
+        Imagem do Medicamento <ion-icon name="camera-outline"></ion-icon>
+      </ion-button>
+      
+    
+      <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+    
+      <ion-button type="submit">Salvar Lembrete <ion-icon name="download-outline"></ion-icon> </ion-button>
+      <div class="yellow-line"></div> <!-- Linha amarela abaixo do botão de enviar -->
     </form>
+    
 
   </ion-content>
 </div>

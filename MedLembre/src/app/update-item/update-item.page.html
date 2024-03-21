@@ -21,22 +21,23 @@
           <ion-input [(ngModel)]="item.Detalhe"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label position="stacked">Horario</ion-label>
-          <ion-input [(ngModel)]="item.data"></ion-input>
+          <!--
+           <ion-label position="stacked">Horario</ion-label >
+          <ion-input label="Horario" [(ngModel)]="item.data"></ion-input>-->
+          <ion-input > <ion-datetime presentation="time" [(ngModel)]="item.data"> </ion-datetime></ion-input>
         </ion-item>
-
+        
         <!-- Exibindo a imagem atual -->
 
-        <ion-item>
+        <ion-item >
           <ion-label position="stacked">Imagem Atual</ion-label>
           <ion-img [src]="item.imagem"></ion-img>
         </ion-item>
 
       <!-- Campo para atualizar a imagem -->
-      <ion-item>
-        <ion-label position="stacked">Nova Imagem</ion-label>
-        <input type="file" (change)="trocarFoto($event)">
-      </ion-item>
+      <ion-button (click)="fileOne.click()" > nova Imagem</ion-button>
+      <input #fileOne type="file" (change)="trocarFoto($event)" style="display: none;">
+
 
 
       <ion-button (click)="atualizarItem()"> Atualizar </ion-button>

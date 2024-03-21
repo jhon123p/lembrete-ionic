@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./splash.page.scss'],
 })
 export class SplashPage implements OnInit {
-
+showDiv1: boolean = false
   constructor( public router:Router) { }
 
   ngOnInit() {
     setTimeout(() => {
-      this.router.navigateByUrl('home')
+      this.router.navigateByUrl('page-apresentation')
     }, 2000);
   }
 

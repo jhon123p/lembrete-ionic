@@ -71,26 +71,40 @@ export class HomePage {
   
     async removerItem(itemId: any) {
       let storedItems = await this.storage.get('dadosFormulario');
-  
+    
       if (storedItems) {
-        // Filtra os itens, removendo aquele com o ID correspondente
+        // Encontrar o item a ser removido
+        const itemToRemove = storedItems.find((element: any) => element.id === itemId);
+    
+        if (itemToRemove) {
+          // Cancelar a notificação associada ao item
+          this.dadosService.cancelNotification(itemToRemove.idNotifictions);
+        }
+    
+        // Filtrar os itens, removendo aquele com o ID correspondente
         storedItems = storedItems.filter((element: any) => element.id !== itemId);
-  
-        // Atualiza os dados no armazenamento
+        
+        // Atualizar os dados no armazenamento
         await this.storage.set('dadosFormulario', storedItems);
       }
+    
+    
   
       // Atualiza a lista exibida após a remoção do item
       this.dadosExibicao = storedItems;
     }
-  ngOnInit() {
-    this.dadosService.recuperarDados().then((dados) => {
-      this.dadosSalvos = dados || [];
-      this.dadosExibicao = this.dadosSalvos.slice(0, 50); // Configure this.dadosExibicao após a recuperação de dados
-    });
-    this.dadosService.setAlarm();
-
-  }
+    ngOnInit() {
+      this.dadosService.recuperarDados().then((dados) => {
+        this.dadosSalvos = dados || [];
+        this.dadosExibicao = this.dadosSalvos.slice(0, 50); // Configure this.dadosExibicao após a recuperação de dados
+    
+        if (this.dadosExibicao.length === 0) {
+          this.dadosService.alertOffreload('Nenhum Medicamento encontrado', 'Não há itens para exibir.');
+        }
+      });
+      this.dadosService.setAlarm();
+    }
+    
   
   carregarMaisItens() {
     this.loadedItems += 2; // Aumenta o número de itens em 2

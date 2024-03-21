@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DadosService } from '../dados.service';
 import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
-
+import { IonDatetimeButton } from '@ionic/angular';
 
 @Component({
   selector: 'app-new-lembrete',
@@ -55,27 +55,32 @@ export class NewLembretePage implements OnInit {
   submitForm() {
     if (this.meuForm.valid) {
       const dadosFormulario = this.meuForm.value;
+  
+      // Verificar se campos obrigatórios estão preenchidos
+      if (!dadosFormulario.nome || !dadosFormulario.Detalhe || !this.selectedImage) {
+        this.dadosService.alertOffreload('Campo sem Imagem', 'Por favor, Adicionar uma Imagem');
+        return; // Encerrar a função se os campos estiverem vazios
+      }
+  
       const idForm = Date.now().toString();
       const idNoti = Math.floor(Math.random() * 4294967296) - 2147483648;
-
+  
       // Recuperar dados existentes e adicionar os novos dados ao array
       this.dadosService.recuperarDados().then((existingData) => {
         let dataToSave: any[] = existingData || [];
         dadosFormulario.id = idForm;
         dadosFormulario.idNotifictions = idNoti
-        
+  
         // Adicionar a imagem aos dados do formulário
-        if (this.selectedImage) {
-          dadosFormulario.imagem = this.selectedImage;
-        }
-        
+        dadosFormulario.imagem = this.selectedImage;
+  
         dataToSave.push(dadosFormulario);
-
+  
         // Salvar dados e mostrar alerta de sucesso
         this.dadosService.salvarDados(dataToSave).then(() => {
           console.log('Dados do formulário salvos no Local Storage');
           this.dadosService.mostrarAlerta('Cadastro Realizado com sucesso', '');
-
+  
           // Agendar notificação local
           const getData = new Date(dadosFormulario.data);
           const title = dadosFormulario.nome;
@@ -83,17 +88,11 @@ export class NewLembretePage implements OnInit {
           this.scheduleLocalNotification(title, body, getData, idNoti);
         });
       });
-
-      // Verificar se campos obrigatórios estão preenchidos
-      if (!dadosFormulario.nome || !dadosFormulario.Detalhe) {
-        this.dadosService.mostrarAlerta('Campos Vazios', 'Por favor, preencha todos os campos obrigatórios.');
-        return; // Encerrar a função se os campos estiverem vazios
-      }
-
+  
       // Verificar se novos dados já existem no array
       this.storage.get('dadosFormulario').then((existingData) => {
         let dataToSave: any[] = [];
-
+  
         if (existingData && Array.isArray(existingData)) {
           dataToSave = existingData;
           const isDuplicate = dataToSave.some((item) => {
@@ -105,6 +104,7 @@ export class NewLembretePage implements OnInit {
       this.dadosService.mostrarAlerta('Campos Inválidos', 'Por favor, preencha os campos corretamente.');
     }
   }
+  
 
   
 

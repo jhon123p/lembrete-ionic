@@ -29,6 +29,10 @@ const routes: Routes = [
     path: 'update-item',
     loadChildren: () => import('./update-item/update-item.module').then( m => m.UpdateItemPageModule)
   },
+  {
+    path: 'page-apresentation',
+    loadChildren: () => import('./page-apresentation/page-apresentation.module').then( m => m.PageApresentationPageModule)
+  },
 ];
 
 @NgModule({

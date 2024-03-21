@@ -7,7 +7,7 @@
 
 -->
 
-<ion-app>
+<ion-app > 
   <ion-menu contentId="main-content">
     <!-- Conteúdo do menu -->
     <ion-header>
@@ -20,11 +20,11 @@
     </ion-header>
     <ion-content>
       <ion-list>
-        <ion-button menuToggle (click)="returnHome()">
-          Inicio
+        <ion-button menuClose  (click)="returnHome()">
+          Inicio <div> </div> <ion-icon name="home"></ion-icon>
         </ion-button>
-        <ion-button menuToggle (click)="navNewLembrete()">
-          Novo Medicamento
+        <ion-button menuClose  (click)="navNewLembrete()">
+          Novo Medicamento <div> </div><ion-icon name="add-circle"></ion-icon>
         </ion-button>
         <!-- Adicione aqui os links para outras páginas-->
       </ion-list>

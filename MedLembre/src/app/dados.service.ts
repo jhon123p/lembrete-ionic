@@ -64,6 +64,20 @@ export class DadosService {
         console.error('Error ao agendar notificação', error)
       })
     } 
+
+  async alertOffreload(header:string , message:string){
+    const alert = await this.alertController.create({
+      header: header ,
+      message: message,
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          
+        }
+      }]
+    })
+    await alert.present();
+  }
   async mostrarAlerta(titulo: string, mensagem: string) {
     const alert = await this.alertController.create({
       header: titulo,
